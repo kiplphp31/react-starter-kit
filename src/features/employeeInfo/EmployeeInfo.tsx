@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { Navigate } from 'react-router-dom';
 
 export interface EmployeeInfoForm {
-    tng_id?: string;
+    staff_detail_txn_id: number;
     interviewer_first_name: string;
     interviewer_last_name: string;
     interviewer_email_id: string;
@@ -24,6 +24,7 @@ function EmployeeInfo() {
     const [validated, setValidated] = useState(false);
     const [errors, setErrors] = useState<string[]>([]);
     const [employeeInfoForm, setEmployeeInfoForm] = useState<EmployeeInfoForm>({
+        staff_detail_txn_id: -1,
         interviewer_first_name: '',
         interviewer_last_name: '',
         interviewer_email_id: '',

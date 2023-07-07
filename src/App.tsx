@@ -7,6 +7,7 @@ import CustomerInfo from './features/customerInfo/CustomerInfo';
 import Header from './components/header';
 import NavbarComponent from './components/navbar';
 import { Container, Row, Col } from 'react-bootstrap';
+import Questionnaire from './features/questionnaire/Questionnaire';
 
 function App() {
     const queryString = new URLSearchParams(window.location.search);
@@ -31,10 +32,18 @@ function App() {
                                 }
                             />
                             <Route
-                                path="/"
+                                path="/t2"
                                 element={
                                     <PrivateRoute>
                                         <CustomerInfo />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/"
+                                element={
+                                    <PrivateRoute>
+                                        <Questionnaire />
                                     </PrivateRoute>
                                 }
                             />

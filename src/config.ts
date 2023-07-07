@@ -20,3 +20,5 @@ export const projectTitle = 'Deposit Finder'
 export const employeeInfoApi = process.env.REACT_APP_EMPLOYEE_INFO_API || 'http://localhost:5000/api/employeeInfo';
 
 export const customerInfoApi = process.env.REACT_APP_CUSTOMER_INFO_API || 'http://localhost:5001/api/customerInfo';
+
+export const questionnaireApi = process.env.REACT_APP_QUESTIONNAIRE_API || 'http://localhost:5002/api/questionnaire';

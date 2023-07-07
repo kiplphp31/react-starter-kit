@@ -1,10 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../../store/store';
-import { fetchEmailDomains, fetchCustomerInfoById, createCustomerInfo, updateCustomerInfo } from './CustomerInfoAPI';
+import { fetchCustomerInfoById, createCustomerInfo, updateCustomerInfo } from './CustomerInfoAPI';
 import { CustomerInfoForm } from './CustomerInfo';
 
 export interface customerInfoState {
-  emailDomainList: string[];
   formData: CustomerInfoForm;
   status: 'idle' | 'loading' | 'failed';
   customerInfoFormSubmitted: boolean;
@@ -12,25 +11,17 @@ export interface customerInfoState {
 }
 
 const initialState: customerInfoState = {
-  emailDomainList: [],
   formData: {} as CustomerInfoForm,
   status: 'idle',
   customerInfoFormSubmitted: false,
   customerInfoFormErrors: []
 };
 
-export const getEmailDomains = createAsyncThunk(
-  'customerInfo/fetchEmailDomains',
-  async () => {
-    const response = await fetchEmailDomains();
-    return response.data;[];
-  }
-);
 
 export const getCustomerInfoById = createAsyncThunk(
   'customerInfo/fetchCustomerInfoById',
-  async (tng_id: string) => {
-    const response = await fetchCustomerInfoById(tng_id);
+  async (staff_detail_txn_id: number) => {
+    const response = await fetchCustomerInfoById(staff_detail_txn_id);
     return response.data;
   }
 );
@@ -38,8 +29,8 @@ export const getCustomerInfoById = createAsyncThunk(
 export const saveCustomerInfo = createAsyncThunk(
   'customerInfo/saveCustomerInfo',
   async (data: CustomerInfoForm) => {
-    if (data.tng_id) {
-      const response = await updateCustomerInfo(data.tng_id, data);
+    if (data.staff_detail_txn_id) {
+      const response = await updateCustomerInfo(data.staff_detail_txn_id, data);
       return response.data;
     } else {
       const response = await createCustomerInfo(data);
@@ -59,22 +50,8 @@ export const customerInfoSlice = createSlice({
     resetFormData: (state) => {
       state.formData = {} as CustomerInfoForm;
     },
-    setEmailDomainList: (state, action: PayloadAction<string[]>) => {
-      state.emailDomainList = action.payload;
-    }
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(getEmailDomains.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(getEmailDomains.fulfilled, (state, action) => {
-        state.status = 'idle';
-        state.emailDomainList = action.payload;
-      })
-      .addCase(getEmailDomains.rejected, (state) => {
-        state.status = 'failed';
-      });
     builder
       .addCase(getCustomerInfoById.pending, (state) => {
         state.status = 'loading';
@@ -106,9 +83,8 @@ export const customerInfoSlice = createSlice({
   }
 });
 
-export const { setFormData, setEmailDomainList, resetFormData } = customerInfoSlice.actions;
+export const { setFormData, resetFormData } = customerInfoSlice.actions;
 
-export const selectEmailDomainList = (state: RootState) => state.customerInfo.emailDomainList;
 export const selectFormData = (state: RootState) => state.customerInfo.formData;
 export const selectCustomerInfoFormSubmitted = (state: RootState) => state.customerInfo.customerInfoFormSubmitted;
 export const selectCustomerInfoFormErrors = (state: RootState) => state.customerInfo.customerInfoFormErrors;

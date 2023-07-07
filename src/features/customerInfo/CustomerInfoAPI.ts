@@ -3,20 +3,15 @@ import { getClient } from "../../services/http";
 
 const httpClient = getClient(customerInfoApi);
 
-// A mock function to mimic making an async request for data
-export function fetchEmailDomains() {
-  return httpClient.get('/emailDomains');
-}
-
 export function fetchCustomerInfo() {
   return httpClient.get('/customerInfo');
 }
 
-export function fetchCustomerInfoById(id: string) {
+export function fetchCustomerInfoById(id: number) {
   return httpClient.get(`/customerInfo/${id}`);
 }
 
-export function updateCustomerInfo(id: string, data: any) {
+export function updateCustomerInfo(id: number, data: any) {
   return httpClient.put(`/customerInfo/${id}`, data);
 }
 
@@ -24,7 +19,7 @@ export function createCustomerInfo(data: any) {
   return httpClient.post('/customerInfo', data);
 }
 
-export function deleteCustomerInfo(id: string) {
+export function deleteCustomerInfo(id: number) {
   return httpClient.delete(`/customerInfo/${id}`);
 }
 

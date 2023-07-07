@@ -2,6 +2,7 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import counterReducer from '../features/counter/counterSlice';
 import employeeInfoReducer from '../features/employeeInfo/EmployeeInfoSlice';
 import customerInfoReducer from '../features/customerInfo/CustomerInfoSlice';
+import questionnaireReducer from '../features/questionnaire/QuestionnaireSlice';
 import authReducer from '../features/auth/authSlice';
 
 export const store = configureStore({
@@ -9,6 +10,7 @@ export const store = configureStore({
     counter: counterReducer,
     employeeInfo: employeeInfoReducer,
     customerInfo: customerInfoReducer,
+    questionnaire: questionnaireReducer,
     auth: authReducer
   }
 });

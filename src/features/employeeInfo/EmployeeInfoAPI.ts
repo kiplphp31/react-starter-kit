@@ -12,11 +12,11 @@ export function fetchEmployeeInfo() {
   return httpClient.get('/employeeInfo');
 }
 
-export function fetchEmployeeInfoById(id: string) {
+export function fetchEmployeeInfoById(id: number) {
   return httpClient.get(`/employeeInfo/${id}`);
 }
 
-export function updateEmployeeInfo(id: string, data: any) {
+export function updateEmployeeInfo(id: number, data: any) {
   return httpClient.put(`/employeeInfo/${id}`, data);
 }
 

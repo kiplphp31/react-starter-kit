@@ -29,8 +29,8 @@ export const getEmailDomains = createAsyncThunk(
 
 export const getEmployeeInfoById = createAsyncThunk(
   'employeeInfo/fetchEmployeeInfoById',
-  async (tng_id: string) => {
-    const response = await fetchEmployeeInfoById(tng_id);
+  async (staff_detail_txn_id: number) => {
+    const response = await fetchEmployeeInfoById(staff_detail_txn_id);
     return response.data;
   }
 );
@@ -38,8 +38,8 @@ export const getEmployeeInfoById = createAsyncThunk(
 export const saveEmployeeInfo = createAsyncThunk(
   'employeeInfo/saveEmployeeInfo',
   async (data: EmployeeInfoForm) => {
-    if (data.tng_id) {
-      const response = await updateEmployeeInfo(data.tng_id, data);
+    if (data.staff_detail_txn_id) {
+      const response = await updateEmployeeInfo(data.staff_detail_txn_id, data);
       return response.data;
     } else {
       const response = await createEmployeeInfo(data);
