@@ -70,15 +70,19 @@ function EmployeeInfo() {
 
     };
 
-    if (employeeInfoFormSubmitted) {
-        return <Navigate to='/customerInfo' replace={true} />
-    }
-    if (employeeInfoFormErrors && employeeInfoFormErrors.length > 0) {
-        employeeInfoFormErrors.forEach((error: any) => {
-            setErrors((errors) => [...errors, error.message]);
+
+    useEffect(() => {
+        if (employeeInfoFormSubmitted) {
+            if (employeeInfoFormErrors.length > 0) {
+                employeeInfoFormErrors.forEach((error: any) => {
+                    setErrors((errors) => [...errors, error.message]);
+                });
+            } else {
+                return <Navigate to='/customerInfo' replace={true} />
+            }
         }
-        );
-    }
+    }, [employeeInfoFormSubmitted, employeeInfoFormErrors]);
+
 
     return (
         <>

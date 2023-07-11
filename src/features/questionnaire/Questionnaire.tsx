@@ -14,6 +14,9 @@ function Questionnaire() {
     const [validated, setValidated] = useState(false);
     const [errors, setErrors] = useState<string[]>([]);
     const [currentQuestionnaire, setCurrentQuestionnaire] = useState<any>({});
+    const [currentQuestionnaireId, setCurrentQuestionnaireId] = useState<any>(0);
+    const [currentQuestionnaireType, setCurrentQuestionnaireType] = useState<string>('');
+    const [nextQuestionTxnId, setNextQuestionTxnId] = useState<any>(0);
     const questionnaireList = useAppSelector(selectQuestionnaireList) as any[];
     const questionnaireFormSubmitted = useAppSelector(selectQuestionnaireFormSubmitted);
     const questionnaireFormErrors = useAppSelector(selectQuestionnaireFormErrors);
@@ -23,10 +26,38 @@ function Questionnaire() {
     }, []);
 
     useEffect(() => {
+        const urlQuery = new URLSearchParams(window.location.search);
+        const questionnaireId = urlQuery.get('questionId');
+        let currentQuestionnaire = questionnaireList[0];
         if (questionnaireList && questionnaireList.length > 0) {
-            setCurrentQuestionnaire(questionnaireList[0]);
+            if (questionnaireId) {
+                setCurrentQuestionnaireId(Number(questionnaireId));
+                currentQuestionnaire = questionnaireList.find(q => q.question_txn_id === Number(questionnaireId));
+                currentQuestionnaire = currentQuestionnaire || questionnaireList[0];
+            }
+            setCurrentQuestionnaire(currentQuestionnaire);
+            setCurrentQuestionnaireType(currentQuestionnaire.options[0].resp_type);
         }
     }, [questionnaireList]);
+
+    const handelSubmit = (reqData: any, next_question_txn_id: any) => {
+        dispatch(saveQuestionnaire(reqData));
+        setNextQuestionTxnId(next_question_txn_id);
+    };
+
+    useEffect(() => {
+        if (questionnaireFormSubmitted) {
+            if (questionnaireFormErrors.length > 0) {
+                setErrors(questionnaireFormErrors);
+            } else {
+                if (nextQuestionTxnId > 0) {
+                    navigate(`/questionnaire?questionId=${nextQuestionTxnId}`);
+                } else {
+                    navigate(`/employeeInfo`);
+                }
+            }
+        }
+    }, [questionnaireFormSubmitted, questionnaireFormErrors]);
 
 
 
@@ -44,9 +75,10 @@ function Questionnaire() {
                     </Row>
                 </div>
 
-                <Button type="button" onClick={() => { navigate(-1) }} >Back</Button>
+                <Button type="button" onClick={() => { navigate(-1) }} className={styles.pullLeft} >Back</Button>
+                {currentQuestionnaireType === 'Text Box' && <Button type="submit" className={styles.pullRight}>Next</Button>}
 
-                <Button type="submit" className={styles.pullRight}>Save</Button>
+
             </Form>
         </>
 

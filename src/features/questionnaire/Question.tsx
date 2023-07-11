@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Form } from "react-bootstrap";
 
 
@@ -15,11 +16,17 @@ export default function Question(props: QuestionProps) {
     const questionOptions = currentQuestionnaire.options;
     const questionOptionsGroups = questionOptions.reduce((groups: any, option: any) => {
         const group = (groups[option.option] || []);
+        if (option.resp_type === 'Text Box' && option.answer_text) {
+            const answer_between = option.answer_text.split('-').map((a: any) => Number(a.trim()));
+            option.answer_min = answer_between[0];
+            option.answer_max = answer_between[1] || null;
+        }
         group.push(option);
         groups[option.option] = {
             option: option.option,
             options_group: group,
             resp_type: option.resp_type,
+            resp_id: option.resp_id,
             next_question_txn_id: option.next_question_txn_id
         };
         return groups;
@@ -37,6 +44,19 @@ export default function Question(props: QuestionProps) {
                 answer_text: option.answer_text
             }
         }, option.next_question_txn_id);
+    }
+
+    const [textInputs, setTextInputs] = useState<any[]>([]);
+
+    const handelTextBoxChange = (e: any, option: any) => {
+        console.log(e.target.value);
+        console.log(option);
+        const resp = option.options_group.filter()
+        setTextInputs([...textInputs, {
+            question_txn_id: currentQuestionnaireId,
+            resp_id: option.resp_id,
+            answer_text: e.target.value
+        }]);
     }
 
     return (
@@ -57,7 +77,16 @@ export default function Question(props: QuestionProps) {
 
                     } else if (option.resp_type === 'Text Box') {
                         return (
-                            <></>
+                            <>
+                                <Form.Group className="mb-3" controlId={option.resp_id}>
+                                    <Form.Label>{option.option}</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder={"Enter " + option.option}
+
+                                    />
+                                </Form.Group>
+                            </>
                         )
                     }
                 })
